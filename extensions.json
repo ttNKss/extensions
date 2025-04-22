@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    "christian-kohler.path-intellisense",
+    "cweijan.dbclient-jdbc",
+    "cweijan.vscode-database-client2",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "github.vscode-pull-request-github",
+    "gruntfuggly.todo-tree",
+    "janisdd.vscode-edit-csv",
+    "mechatroner.rainbow-csv",
+    "ms-ceintl.vscode-language-pack-ja",
+    "ms-vscode-remote.remote-containers",
+    "oderwat.indent-rainbow",
+    "saoudrizwan.claude-dev",
+    "shardulm94.trailing-spaces",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "unwantedRecommendations": []
+}
