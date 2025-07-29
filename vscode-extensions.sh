@@ -3,12 +3,12 @@
 # VSCode拡張機能管理スクリプト
 # 使用方法:
 # ./vscode-extensions.sh list - インストール済み拡張機能の一覧を表示
-# ./vscode-extensions.sh export [ファイル名] - 拡張機能リストをextensions.json形式で出力（デフォルト: extensions.json）
-# ./vscode-extensions.sh install [ファイル名] - extensions.jsonから拡張機能をインストール（デフォルト: extensions.json）
+# ./vscode-extensions.sh export [ファイル名] - 拡張機能リストを.vscode/extensions.json形式で出力（デフォルト: .vscode/extensions.json）
+# ./vscode-extensions.sh install [ファイル名] - .vscode/extensions.jsonから拡張機能をインストール（デフォルト: .vscode/extensions.json）
 # ./vscode-extensions.sh backup-install [ファイル名] - 拡張機能をエクスポートしてからインストール（新環境セットアップ用）
 
 # デフォルトのファイル名
-DEFAULT_FILE="extensions.json"
+DEFAULT_FILE=".vscode/extensions.json"
 
 # コマンドライン引数の確認
 if [ $# -eq 0 ]; then
@@ -28,7 +28,7 @@ list_extensions() {
     echo "合計: $(code --list-extensions | wc -l | tr -d ' ') 個の拡張機能がインストールされています"
 }
 
-# 拡張機能リストをextensions.json形式でファイルに出力
+# 拡張機能リストを.vscode/extensions.json形式でファイルに出力
 export_extensions() {
     echo "拡張機能リストを $FILE に出力しています..."
     
@@ -67,7 +67,7 @@ export_extensions() {
     echo "完了！ $EXTENSION_COUNT 個の拡張機能が $FILE に保存されました"
 }
 
-# extensions.jsonから拡張機能をインストール
+# .vscode/extensions.jsonから拡張機能をインストール
 install_extensions() {
     if [ ! -f "$FILE" ]; then
         echo "エラー: $FILE が見つかりません"

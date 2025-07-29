@@ -5,6 +5,8 @@
     "cweijan.vscode-database-client2",
     "donjayamanne.githistory",
     "eamodio.gitlens",
+    "github.copilot",
+    "github.copilot-chat",
     "github.vscode-pull-request-github",
     "gruntfuggly.todo-tree",
     "janisdd.vscode-edit-csv",
