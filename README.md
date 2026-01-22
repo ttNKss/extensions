@@ -46,3 +46,34 @@ chmod +x vscode-extensions.sh
 | `--cursor`, `-c` | Cursorエディタを対象にする（デフォルトはVSCode） |
 
 ※ファイル名を省略した場合は `.vscode/extensions.json` が使用されます
+
+## 除外設定（.extensionsignore）
+
+特定の拡張機能をエクスポート対象から除外したい場合は、スクリプトと同じディレクトリに `.extensionsignore` ファイルを作成します。
+
+### 形式
+
+```
+# コメント行（#で始まる行は無視されます）
+# 空行も無視されます
+
+# 部分一致で除外されます
+mycompany.           # mycompany.で始まる拡張機能を除外
+internal-            # internal-を含む拡張機能を除外
+ms-vscode-remote.    # 特定のパブリッシャーを除外
+```
+
+### 動作例
+
+```bash
+$ ./vscode-extensions.sh export
+Cursor拡張機能リストを .vscode/extensions.json に出力しています...
+除外設定ファイル: /path/to/.extensionsignore を使用
+  除外: mycompany.internal-tools
+  除外: mycompany.private-snippets
+
+完了！
+  合計: 50 個
+  除外: 2 個
+  出力: 48 個の拡張機能が .vscode/extensions.json に保存されました
+```
