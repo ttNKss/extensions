@@ -1,18 +1,35 @@
 #!/bin/bash
 
-# VSCode拡張機能管理スクリプト
+# VSCode/Cursor 拡張機能管理スクリプト
 # 使用方法:
-# ./vscode-extensions.sh list - インストール済み拡張機能の一覧を表示
-# ./vscode-extensions.sh export [ファイル名] - 拡張機能リストを.vscode/extensions.json形式で出力（デフォルト: .vscode/extensions.json）
-# ./vscode-extensions.sh install [ファイル名] - .vscode/extensions.jsonから拡張機能をインストール（デフォルト: .vscode/extensions.json）
-# ./vscode-extensions.sh backup-install [ファイル名] - 拡張機能をエクスポートしてからインストール（新環境セットアップ用）
+# ./vscode-extensions.sh [--cursor|-c] list - インストール済み拡張機能の一覧を表示
+# ./vscode-extensions.sh [--cursor|-c] export [ファイル名] - 拡張機能リストを.vscode/extensions.json形式で出力（デフォルト: .vscode/extensions.json）
+# ./vscode-extensions.sh [--cursor|-c] install [ファイル名] - .vscode/extensions.jsonから拡張機能をインストール（デフォルト: .vscode/extensions.json）
+# ./vscode-extensions.sh [--cursor|-c] backup-install [ファイル名] - 拡張機能をエクスポートしてからインストール（新環境セットアップ用）
+#
+# オプション:
+#   --cursor, -c  Cursorエディタを対象にする（デフォルトはVSCode）
 
 # デフォルトのファイル名
 DEFAULT_FILE=".vscode/extensions.json"
 
+# デフォルトのエディタコマンド
+EDITOR_CMD="code"
+EDITOR_NAME="VSCode"
+
+# --cursor または -c オプションの確認
+if [ "$1" = "--cursor" ] || [ "$1" = "-c" ]; then
+    EDITOR_CMD="cursor"
+    EDITOR_NAME="Cursor"
+    shift  # オプションを消費して次の引数へ
+fi
+
 # コマンドライン引数の確認
 if [ $# -eq 0 ]; then
-    echo "使用方法: $0 [list|export|install|backup-install] [ファイル名(オプション)]"
+    echo "使用方法: $0 [--cursor|-c] [list|export|install|backup-install] [ファイル名(オプション)]"
+    echo ""
+    echo "オプション:"
+    echo "  --cursor, -c  Cursorエディタを対象にする（デフォルトはVSCode）"
     exit 1
 fi
 
@@ -23,18 +40,18 @@ FILE=${2:-$DEFAULT_FILE}
 
 # インストール済み拡張機能の一覧を表示
 list_extensions() {
-    echo "インストール済みVSCode拡張機能一覧:"
-    code --list-extensions
-    echo "合計: $(code --list-extensions | wc -l | tr -d ' ') 個の拡張機能がインストールされています"
+    echo "インストール済み${EDITOR_NAME}拡張機能一覧:"
+    $EDITOR_CMD --list-extensions
+    echo "合計: $($EDITOR_CMD --list-extensions | wc -l | tr -d ' ') 個の拡張機能がインストールされています"
 }
 
 # 拡張機能リストを.vscode/extensions.json形式でファイルに出力
 export_extensions() {
-    echo "拡張機能リストを $FILE に出力しています..."
+    echo "${EDITOR_NAME}拡張機能リストを $FILE に出力しています..."
     
     # 一時ファイルに拡張機能IDのリストを取得
     TEMP_LIST=$(mktemp)
-    code --list-extensions > "$TEMP_LIST"
+    $EDITOR_CMD --list-extensions > "$TEMP_LIST"
     
     # 拡張機能の数をカウント
     EXTENSION_COUNT=$(wc -l < "$TEMP_LIST" | tr -d ' ')
@@ -74,7 +91,7 @@ install_extensions() {
         exit 1
     fi
     
-    echo "$FILE から拡張機能をインストールしています..."
+    echo "$FILE から${EDITOR_NAME}に拡張機能をインストールしています..."
     
     # jqコマンドがインストールされているか確認
     if command -v jq &> /dev/null; then
@@ -98,7 +115,7 @@ install_extensions() {
         if [ -n "$extension" ]; then
             current=$((current + 1))
             echo "[$current/$total] $extension をインストール中..."
-            code --install-extension "$extension"
+            $EDITOR_CMD --install-extension "$extension"
         fi
     done
     
@@ -127,7 +144,7 @@ case "$ACTION" in
         ;;
     *)
         echo "エラー: 無効なアクション '$ACTION'"
-        echo "使用方法: $0 [list|export|install|backup-install] [ファイル名(オプション)]"
+        echo "使用方法: $0 [--cursor|-c] [list|export|install|backup-install] [ファイル名(オプション)]"
         exit 1
         ;;
 esac
