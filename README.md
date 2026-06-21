@@ -10,6 +10,26 @@ VSCode/Cursor/Antigravityの拡張機能の一覧出力とインストールを�
 - バックアップと一括インストール
 - **VSCode / Cursor / Antigravity 対応**
 
+## 前提条件（CLIコマンドのインストール）
+
+本スクリプトを実行するには、対象とするエディタのCLIコマンドがシステムにインストールされ、環境変数 `PATH` に追加されている必要があります。
+
+### VSCode (`code` コマンド)
+1. **VSCode** を起動します。
+2. コマンドパレット（`Cmd+Shift+P` または `Ctrl+Shift+P`）を開きます。
+3. `Shell Command: Install 'code' command in PATH` と入力して選択し、実行します。
+
+### Cursor (`cursor` コマンド)
+1. **Cursor** を起動します。
+2. コマンドパレット（`Cmd+Shift+P` または `Ctrl+Shift+P`）を開きます。
+3. `Shell Command: Install 'cursor' command in PATH` と入力して選択し、実行します。
+
+### Antigravity (`antigravity` または `antigravity-ide` コマンド)
+1. **Antigravity** を起動します。
+2. コマンドパレット（`Cmd+Shift+P` または `Ctrl+Shift+P`）を開きます。
+3. `Shell Command: Install 'antigravity' command in PATH` 
+   （環境によっては `Install 'antigravity-ide' command in PATH`）と入力して選択し、実行します。
+
 ## 使用方法
 
 ```bash

@@ -28,7 +28,13 @@ if [ "$1" = "--cursor" ] || [ "$1" = "-c" ]; then
     EDITOR_NAME="Cursor"
     shift  # オプションを消費して次の引数へ
 elif [ "$1" = "--antigravity" ] || [ "$1" = "-a" ]; then
-    EDITOR_CMD="antigravity"
+    if command -v antigravity &> /dev/null; then
+        EDITOR_CMD="antigravity"
+    elif command -v antigravity-ide &> /dev/null; then
+        EDITOR_CMD="antigravity-ide"
+    else
+        EDITOR_CMD="antigravity"
+    fi
     EDITOR_NAME="Antigravity"
     shift  # オプションを消費して次の引数へ
 fi
@@ -191,6 +197,32 @@ backup_install() {
     export_extensions
     install_extensions
 }
+
+# エディタコマンドの存在確認
+if ! command -v "$EDITOR_CMD" &> /dev/null; then
+    echo "エラー: ${EDITOR_NAME}のCLIコマンド '${EDITOR_CMD}' が見つかりません。" >&2
+    echo "" >&2
+    echo "【${EDITOR_NAME} CLIコマンドのインストール方法】" >&2
+    case "$EDITOR_CMD" in
+        code)
+            echo "1. VSCode を起動します。" >&2
+            echo "2. コマンドパレット（Cmd+Shift+P または Ctrl+Shift+P）を開きます。" >&2
+            echo "3. 「Shell Command: Install 'code' command in PATH」を入力して選択し、実行します。" >&2
+            ;;
+        cursor)
+            echo "1. Cursor を起動します。" >&2
+            echo "2. コマンドパレット（Cmd+Shift+P または Ctrl+Shift+P）を開きます。" >&2
+            echo "3. 「Shell Command: Install 'cursor' command in PATH」を入力して選択し、実行します。" >&2
+            ;;
+        antigravity|antigravity-ide)
+            echo "1. Antigravity を起動します。" >&2
+            echo "2. コマンドパレット（Cmd+Shift+P または Ctrl+Shift+P）を開きます。" >&2
+            echo "3. 「Shell Command: Install 'antigravity' command in PATH」" >&2
+            echo "   または「Shell Command: Install 'antigravity-ide' command in PATH」を入力して選択し、実行します。" >&2
+            ;;
+    esac
+    exit 1
+fi
 
 # 指定されたアクションを実行
 case "$ACTION" in
