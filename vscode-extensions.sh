@@ -180,16 +180,41 @@ install_extensions() {
     # 拡張機能をインストール
     total=$(echo "$EXTENSIONS" | wc -l | tr -d ' ')
     current=0
+    FAILED_EXTS=$(mktemp)
     
-    echo "$EXTENSIONS" | while read -r extension; do
+    while read -r extension; do
         if [ -n "$extension" ]; then
             current=$((current + 1))
-            echo "[$current/$total] $extension をインストール中..."
-            $EDITOR_CMD --install-extension "$extension"
+            echo -n "[$current/$total] $extension をインストール中... "
+            OUTPUT=$($EDITOR_CMD --install-extension "$extension" 2>&1)
+            EXIT_CODE=$?
+            
+            if [ $EXIT_CODE -ne 0 ]; then
+                # エディタのクラッシュ等で終了コードが異常でも、成功メッセージが含まれていれば成功とみなす
+                if echo "$OUTPUT" | grep -qE "was successfully installed|is already installed"; then
+                    echo "成功"
+                else
+                    echo "失敗"
+                    echo "$extension" >> "$FAILED_EXTS"
+                fi
+            else
+                echo "成功"
+            fi
         fi
-    done
+    done <<< "$EXTENSIONS"
     
-    echo "完了！ $total 個の拡張機能がインストールされました"
+    FAILED_COUNT=$(wc -l < "$FAILED_EXTS" | tr -d ' ')
+    SUCCESS_COUNT=$((total - FAILED_COUNT))
+    
+    echo ""
+    echo "完了！ $SUCCESS_COUNT 個の拡張機能が正常にインストールされました"
+    
+    if [ "$FAILED_COUNT" -gt 0 ]; then
+        echo "以下の $FAILED_COUNT 個の拡張機能はインストールに失敗しました（名前や存在を確認してください）:"
+        sed 's/^/  - /' "$FAILED_EXTS"
+    fi
+    
+    rm "$FAILED_EXTS"
 }
 
 # バックアップしてから新環境にインストール（新しいマシンのセットアップ用）
