@@ -1,6 +1,6 @@
-# VSCode/Cursor 拡張機能管理ツール
+# VSCode/Cursor/Antigravity 拡張機能管理ツール
 
-VSCode/Cursorの拡張機能の一覧出力とインストールを自動化するシェルスクリプト。
+VSCode/Cursor/Antigravityの拡張機能の一覧出力とインストールを自動化するシェルスクリプト。
 
 ## 機能
 
@@ -8,7 +8,7 @@ VSCode/Cursorの拡張機能の一覧出力とインストールを自動化す�
 - 拡張機能リストをextensions.json形式で出力
 - extensions.jsonから拡張機能をインストール
 - バックアップと一括インストール
-- **VSCode / Cursor 両対応**
+- **VSCode / Cursor / Antigravity 対応**
 
 ## 使用方法
 
@@ -37,6 +37,14 @@ chmod +x vscode-extensions.sh
 ./vscode-extensions.sh -c export
 ./vscode-extensions.sh --cursor install
 ./vscode-extensions.sh -c backup-install
+
+# === Antigravity ===
+
+# --antigravity または -a オプションを追加するとAntigravityを対象にします
+./vscode-extensions.sh --antigravity list
+./vscode-extensions.sh -a export
+./vscode-extensions.sh --antigravity install
+./vscode-extensions.sh -a backup-install
 ```
 
 ## オプション
@@ -44,6 +52,7 @@ chmod +x vscode-extensions.sh
 | オプション | 説明 |
 |-----------|------|
 | `--cursor`, `-c` | Cursorエディタを対象にする（デフォルトはVSCode） |
+| `--antigravity`, `-a` | Antigravityエディタを対象にする |
 
 ※ファイル名を省略した場合は `.vscode/extensions.json` が使用されます
 

@@ -1,14 +1,15 @@
 #!/bin/bash
 
-# VSCode/Cursor 拡張機能管理スクリプト
+# VSCode/Cursor/Antigravity 拡張機能管理スクリプト
 # 使用方法:
-# ./vscode-extensions.sh [--cursor|-c] list - インストール済み拡張機能の一覧を表示
-# ./vscode-extensions.sh [--cursor|-c] export [ファイル名] - 拡張機能リストを.vscode/extensions.json形式で出力（デフォルト: .vscode/extensions.json）
-# ./vscode-extensions.sh [--cursor|-c] install [ファイル名] - .vscode/extensions.jsonから拡張機能をインストール（デフォルト: .vscode/extensions.json）
-# ./vscode-extensions.sh [--cursor|-c] backup-install [ファイル名] - 拡張機能をエクスポートしてからインストール（新環境セットアップ用）
+# ./vscode-extensions.sh [--cursor|-c|--antigravity|-a] list - インストール済み拡張機能の一覧を表示
+# ./vscode-extensions.sh [--cursor|-c|--antigravity|-a] export [ファイル名] - 拡張機能リストを.vscode/extensions.json形式で出力（デフォルト: .vscode/extensions.json）
+# ./vscode-extensions.sh [--cursor|-c|--antigravity|-a] install [ファイル名] - .vscode/extensions.jsonから拡張機能をインストール（デフォルト: .vscode/extensions.json）
+# ./vscode-extensions.sh [--cursor|-c|--antigravity|-a] backup-install [ファイル名] - 拡張機能をエクスポートしてからインストール（新環境セットアップ用）
 #
 # オプション:
-#   --cursor, -c  Cursorエディタを対象にする（デフォルトはVSCode）
+#   --cursor, -c       Cursorエディタを対象にする（デフォルトはVSCode）
+#   --antigravity, -a  Antigravityエディタを対象にする
 
 # デフォルトのファイル名
 DEFAULT_FILE=".vscode/extensions.json"
@@ -21,19 +22,24 @@ IGNORE_FILE="$SCRIPT_DIR/.extensionsignore"
 EDITOR_CMD="code"
 EDITOR_NAME="VSCode"
 
-# --cursor または -c オプションの確認
+# エディタ指定オプションの確認
 if [ "$1" = "--cursor" ] || [ "$1" = "-c" ]; then
     EDITOR_CMD="cursor"
     EDITOR_NAME="Cursor"
+    shift  # オプションを消費して次の引数へ
+elif [ "$1" = "--antigravity" ] || [ "$1" = "-a" ]; then
+    EDITOR_CMD="antigravity"
+    EDITOR_NAME="Antigravity"
     shift  # オプションを消費して次の引数へ
 fi
 
 # コマンドライン引数の確認
 if [ $# -eq 0 ]; then
-    echo "使用方法: $0 [--cursor|-c] [list|export|install|backup-install] [ファイル名(オプション)]"
+    echo "使用方法: $0 [--cursor|-c|--antigravity|-a] [list|export|install|backup-install] [ファイル名(オプション)]"
     echo ""
     echo "オプション:"
-    echo "  --cursor, -c  Cursorエディタを対象にする（デフォルトはVSCode）"
+    echo "  --cursor, -c       Cursorエディタを対象にする（デフォルトはVSCode）"
+    echo "  --antigravity, -a  Antigravityエディタを対象にする"
     exit 1
 fi
 
@@ -202,7 +208,7 @@ case "$ACTION" in
         ;;
     *)
         echo "エラー: 無効なアクション '$ACTION'"
-        echo "使用方法: $0 [--cursor|-c] [list|export|install|backup-install] [ファイル名(オプション)]"
+        echo "使用方法: $0 [--cursor|-c|--antigravity|-a] [list|export|install|backup-install] [ファイル名(オプション)]"
         exit 1
         ;;
 esac
